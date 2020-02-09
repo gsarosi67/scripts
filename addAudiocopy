@@ -1,0 +1,8 @@
+#!/bin/bash -x
+
+#####
+#  $1: -i input video file
+#  $2: -i input audio file
+#  $3: output filename
+
+ffmpeg -i $1 -i $2 -c copy -map 0:v:0 -map 1:a:0 -shortest $3.mp4

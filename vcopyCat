@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Concate 2 video files without doing any encoding just copy the current streams. 
+#  this will only work for 2 files with the same encoding
+
+count=1
+for f in $@
+do
+   if [ $count = 1 ]; then
+     genre=$1 
+   elif [ $count = 2 ]; then
+     info=$2
+   elif [ $count = 3 ]; then
+     extra=$3
+   else 
+     echo "file '$f'" >> input.txt
+     fname="${f%.*}"
+     ext=${f##*.}
+   fi
+   count=$(( count + 1 ))
+done
+
+ffmpeg -f concat -i input.txt -c:v copy -c:a copy -metadata "genre="$genre -metadata "description=$genre,$info" $fname-$extra.$ext
+rm input.txt
+

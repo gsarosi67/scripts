@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for i in `seq $3 $4`;
+do
+   printf "file '%s%d%s'\n" $1 $i $2 >> $5.txt
+done

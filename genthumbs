@@ -1,0 +1,31 @@
+#!/bin/bash
+
+intrv=$2
+secs=0
+mins=0
+hours=0
+
+calc_time () {
+   mins=$(( mins + (intrv / 60) ))
+   secs=$(( secs + (intrv % 60) ))
+   #echo 1 $mins : $secs
+   if [ $secs -gt 59 ]
+   then
+      mins=$(( mins + (secs / 60) ))
+      secs=$(( $secs % 60 ))
+      #echo 2 $mins : $secs
+   fi
+   if [ $mins -gt 59 ]
+   then
+      hours=$(( $hours + ($mins / 60) ))
+      mins=$(( $mins % 60 ))
+   fi
+}
+
+calc_time
+for ((i = 0 ; i < $3 ; i++)); do
+   frthumb $1 `printf "%02d:%02d:%02d" $hours $mins $secs`
+   #echo frthumb $1 `printf "%02d:%02d:%02d" $hours $mins $secs`
+   calc_time
+done
+

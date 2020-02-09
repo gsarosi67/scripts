@@ -1,0 +1,19 @@
+#!/bin/bash
+
+count=1
+for f in $@
+do
+   if [ $count = 1 ]; then
+     genre=$1 
+   elif [ $count = 2 ]; then
+     extra=$2
+   else 
+     echo "file '$f'" >> input.txt
+     fname="${f%.*}"
+   fi
+   count=`expr $count + 1`
+done
+
+ffmpeg -f concat -i input.txt -c:v libx264 -profile:v main -level 3.1 -c:a aac -strict -2 -ab 128k -b:v 2500k -pix_fmt yuv420p -movflags faststart -vf "yadif=0:-1:0" -metadata "genre="$genre $fname-$extra.mp4
+rm input.txt
+

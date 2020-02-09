@@ -1,0 +1,8 @@
+#!/bin/bash
+
+ext=${1##*.}
+if [ "$3" = "end" ]; then
+   ffmpeg -i $1 -ss $2 -c copy ${1%.*}$4.$ext
+else
+   ffmpeg -i $1 -ss $2 -to $3 -c copy ${1%.*}$4.$ext
+fi

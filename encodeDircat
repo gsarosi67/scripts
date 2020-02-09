@@ -1,0 +1,94 @@
+#!/bin/bash 
+
+
+inputDir="MovieInput"
+year="2020"
+genre=""
+description=""
+output_extra=""
+bitrate="8192k"
+ext="MOV"
+
+disk1="/Volumes/Video-2015-2018/"
+disk2="/Users/sarosi/Dropbox/"
+MediaDir="CameraVideo/"
+disk1MovieDir="HomeMovies"
+disk2MovieDir="HomeMovies"
+
+PARAMS=""
+while (( "$#" )); do
+  case "$1" in
+    -d|--directory)
+        inputDir=$2
+        shift 2
+      ;;
+    -y|--year)
+        year=$2
+        shift 2
+      ;;
+    -g|--genre)
+        genre=$2
+        shift 2
+      ;;
+    -de|--description)
+        description=$2
+        shift 2
+      ;;
+    -o|--output_extra)
+        output_extra=$2
+        shift 2
+      ;;
+    -b|--bitrate)
+        bitrate=$2
+        shift 2
+      ;;
+    -d1|--disk1)
+        disk1=$2
+        shift 2
+      ;;
+    -d2|--disk2)
+        disk2=$2
+        shift 2
+      ;;
+    -md|--mediadir)
+        MediaDir=$2
+        shift 2
+      ;;
+    -md1|--moviedirdisk1)
+        disk1MovieDir=$2
+        shift 2
+      ;;
+    -md2|--moviedirdisk2)
+        disk2MovieDir=$2
+        shift 2
+      ;;
+    -e|--extension)
+        ext=$2
+        shift 2
+      ;;
+    --) # end argument parsing
+        shift
+        break
+      ;;
+    -*|--*=) # unsupported flags
+        echo "Error: Unsupported flag $1" >&2
+        exit 1
+      ;;
+    *) # preserve positional arguments
+        PARAMS="$PARAMS $1"
+        shift
+      ;;
+  esac
+done
+
+
+for f in $disk1$MediaDir$year/$inputDir/*.$ext
+do
+   echo "file '$f'" >> input.txt
+done
+
+ffmpeg -f concat -safe 0 -i input.txt -c:v libx264 -profile:v main -level 3.1 -c:a aac -strict -2 -ab 128k -b:v $bitrate -movflags faststart -vf "yadif=0:-1:0" -metadata "genre="$year$genre -metadata "description=$year,$description" $disk2$disk2MovieDir/$year/$inputDir$output_extra.mp4
+
+cp $disk2$disk2MovieDir/$year/$inputDir$output_extra.mp4 $disk1$disk1MovieDir/$year
+
+rm input.txt

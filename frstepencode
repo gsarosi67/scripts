@@ -1,0 +1,17 @@
+#!/bin/bash
+
+###################
+#   Encode video with specified frame rate.  Audio is disabled
+# $1 - input file
+# $2 - frame rate
+# $3 - framestep select frame after every step frames
+#    - to make a video with 3 frames per second, but play it back at 30 fps:
+#         frstepencode input.mp4 30 10 genre output
+# $4 - genre
+# $5 - filename extra
+
+# This is not working in v4.1.4 it produces a long video, not sure what is broken
+#   ToDo:  turn on debugging and try and figure out the difference
+
+/opt/ffmpeg/2.8.2/ffmpeg -i $1 -c:v libx264 -profile:v main -level 3.1 -an -strict -2 -ab 128k -b:v 6800k -movflags faststart -vf "yadif=0:-1:0,framestep=$3,setpts=N/$2/TB,fps=$2,deshake" -metadata "genre="$4 ${1%.*}$5.mp4
+

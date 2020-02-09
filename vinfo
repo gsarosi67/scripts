@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ "$2" = "-f" ]; then
+  ffprobe -v quiet -print_format json -show_format $1
+else
+  ffprobe -v quiet -print_format json -show_streams $1
+fi

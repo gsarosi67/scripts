@@ -1,0 +1,17 @@
+#!/bin/bash
+
+i=1
+for f in $1/*$2
+do 
+   echo $i " " $f
+   name=${f%.*}
+   ext=${f##*.}
+   newname=$(echo "$name" | tr -d '[:blank:][,][(][)][;]')
+   newext=$(echo "$ext" | tr -d '[:blank:][,]')
+   if [ "$f" != "$newname.$newext" ]; then
+     echo "renaming " $f " to " $newname.$newext
+     mv -i "$f" $newname.$newext
+   fi
+   i=`expr $i + 1`
+done
+

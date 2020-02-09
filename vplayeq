@@ -1,0 +1,13 @@
+#!/bin/bash
+
+##
+# $1 filename
+# $2 start time
+# $3 -to is the end time, not the duration, but the end time to stop
+# $4 eq filter parameters, i.e. brightness=.2:contrast=1.2:saturation=1.4
+
+if [ "$3" = "end" ]; then
+   ffplay -i $1 -ss $2 -vf "yadif=0:-1:0,eq=$4"
+else
+   ffplay -i $1 -ss $2 -to $3 -vf "yadif=0:-1:0,eq=$4"
+fi

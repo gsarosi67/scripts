@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Fix audio sync by delaying the video 
+ffmpeg -i $1 -itsoffset $2 -i $1 -map 1:v -map 0:a -c copy -metadata "genre="$3 ${1%.*}$4.mp4
+

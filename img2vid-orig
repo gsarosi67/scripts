@@ -1,0 +1,12 @@
+#!/bin/bash -x
+
+#####
+#  $1: -i input filename i.e. IMG_%d.JPG or IMG_%04d.JPG
+#  $2: -start_number - number of first frame
+#  $3: -vframes - number of frames
+#  $4: -r framerate
+#  $5: output filename
+#  $6: genre1
+#  $7: genre2
+
+ffmpeg -r $4 -f image2 -s 1920x1080 -start_number $2 -i $1 -vframes $3 -c:v libx264 -profile:v main -level 3.1 -b:v 6800k -movflags faststart -vf "yadif=0:-1:0" -pix_fmt yuv420p -metadata "genre="$6$7 $5.mp4

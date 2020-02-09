@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo $1 $2 $3 $4
+
+if [ -z $4 ]; then
+  fps=15
+else
+  fps=$4
+fi
+
+ffmpeg -y -ss $2 -t $3 -i $1 -vf fps=$fps,scale=320:-1:flags=lanczos,palettegen palette.png
+
+ffmpeg -ss $2 -t $3 -i $1 -i palette.png -filter_complex "fps=$fps,scale=320:-1:flags=lanczos[x];[x][1:v]paletteuse" ${1%.*}$4$5.gif

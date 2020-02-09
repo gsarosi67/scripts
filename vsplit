@@ -1,0 +1,76 @@
+#!/bin/bash
+
+##
+
+input="videofile.mp4"
+starttime="00:00:00"
+endtime="end"
+bitrate="8192k"
+year="2019"
+genre=""
+description=""
+output_extra="-new"
+ext="mp4"
+
+PARAMS=""
+while (( "$#" )); do
+  case "$1" in
+    -i|--input)
+        input=$2
+        shift 2
+      ;;
+    -y|--year)
+        year=$2
+        shift 2
+      ;;
+    -g|--genre)
+        genre=$2
+        shift 2
+      ;;
+    -de|--description)
+        description=$2
+        shift 2
+      ;;
+    -o|--output_extra)
+        output_extra=$2
+        shift 2
+      ;;
+    -b|--bitrate)
+        bitrate=$2
+        shift 2
+      ;;
+    -s|--start)
+        starttime=$2
+        shift 2
+      ;;
+    -e|--end)
+        endtime=$2
+        shift 2
+      ;;
+    -ext|--extension)
+        ext=$2
+        shift 2
+      ;;
+    --) # end argument parsing
+        shift
+        break
+      ;;
+    -*|--*=) # unsupported flags
+        echo "Error: Unsupported flag $1" >&2
+        exit 1
+      ;;
+    *) # preserve positional arguments
+        PARAMS="$PARAMS $1"
+        shift
+      ;;
+  esac
+done
+
+
+if [ "$endtime" = "end" ]; then
+  echo "start="$starttime
+   ffmpeg -i $input -ss $starttime -c:v libx264 -profile:v main -level 3.1 -c:a aac -strict -2 -ab 128k -b:v $bitrate -movflags faststart -vf "yadif=0:-1:0" -metadata "genre="$year$genre -metadata "description=$year,$description" ${input%.*}$output_extra.$ext
+else
+  echo "start="$starttime, "end="$endtime
+   ffmpeg -i $input -ss $starttime -to $endtime -c:v libx264 -profile:v main -level 3.1 -c:a aac -strict -2 -ab 128k -b:v $bitrate -movflags faststart -vf "yadif=0:-1:0" -metadata "genre="$year$genre -metadata "description=$year,$description" ${input%.*}$output_extra.$ext
+fi

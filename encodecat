@@ -1,0 +1,4 @@
+#!/bin/bash
+
+   ffmpeg -f concat -safe 0 -i $1 -c:v libx264 -profile:v main -level 3.1 -c:a aac -strict -2 -ab 128k -b:v 6800k -movflags faststart -vf "yadif=0:-1:0" -metadata "genre="$3$4 $2.mp4
+

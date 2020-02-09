@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# $1 - full path to found file
+# $2 - root path of search
+# $3 - path to this script
+# all other args
+
+
+#FFMPEG doesn't like filenames with spaces so create a link to the actual file
+ext=${1##*.}
+tempname=templink_`date +'%s'`.$ext
+ln -s "$1" $tempname
+echo $1","`vidur $tempname`
+rm $tempname

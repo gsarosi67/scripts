@@ -1,0 +1,13 @@
+#!/bin/bash
+
+disk3="/Volumes/Video-2015-2018/"
+disk3MovieDir="HomeMovies"
+
+if [ $5 = "-an" ]; then
+  ffmpeg -f concat -safe 0 -i $1 -c:v libx264 -profile:v main -level 3.1 -an -b:v 6800k -movflags faststart -vf "yadif=0:-1:0" -metadata "genre="$3$4 $2${1%.*}$5.mp4
+else
+  ffmpeg -f concat -safe 0 -i $1 -c:v libx264 -profile:v main -level 3.1 -c:a aac -strict -2 -ab 128k -b:v 6800k -movflags faststart -vf "yadif=0:-1:0" -metadata "genre="$3$4 $2${1%.*}$5.mp4
+fi
+
+cp $2${1%.*}$5.mp4 $disk3$disk3MovieDir/$3
+

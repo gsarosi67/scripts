@@ -1,0 +1,12 @@
+#!/bin/bash
+
+###################
+#   Encode video with specified frame rate.  Audio is disabled
+#   Use the motion interpolation filter
+# $1 - input file
+# $2 - frame rate
+# $3 - genre
+# $4 - filename extra
+
+ffmpeg -i $1 -c:v libx264 -profile:v main -level 3.1 -an -strict -2 -ab 128k -b:v 6800k -movflags faststart -vf "yadif=0:-1:0,minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=$2'" -metadata "genre="$3 ${1%.*}$4.mp4
+

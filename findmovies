@@ -1,0 +1,3 @@
+#!/bin/bash
+
+find $1 -type f \( -iname \*.mov -o -iname \*.mpg -o -iname \*.mp4 -o -iname \*.m4v -o -iname \*.avi -o -iname \*.3gp -o -iname \*.ogg -o -iname \*.wmv -o -iname \*.webm -o -iname \*.ts -o -iname *.flv \) -exec $2 "{}" $@ \;

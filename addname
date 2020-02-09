@@ -1,0 +1,11 @@
+#!/bin/bash 
+
+var="$(find "$1" -name "*.$2")"
+i=1
+for f in $var
+do 
+   echo "doing $f"
+   echo "renaming " $f " to " ${f%.*}_$3.${f##*.}
+   mv $f ${f%.*}_$3.${f##*.}
+   i=`expr $i + 1`
+done

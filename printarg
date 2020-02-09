@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# $1 - full path to found file
+# $2 - root path of search
+# $3 - path to this script
+# all other args
+
+echo $1 " " $2 $4

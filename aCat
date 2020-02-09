@@ -1,0 +1,17 @@
+#!/bin/bash
+
+count=1
+for f in $@
+do
+   if [ $count = 1 ]; then
+     output=$f 
+   else 
+     echo "file '$f'" >> input.txt
+     fname="${f%.*}"
+   fi
+   count=$(( count + 1 ))
+done
+
+ffmpeg -f concat -i input.txt -c copy $output.mp3
+rm input.txt
+

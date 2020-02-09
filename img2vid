@@ -1,0 +1,9 @@
+#!/bin/bash -x
+
+#####
+#  $1: -i input filename i.e. IMG_%d.JPG or IMG_%04d.JPG
+#  $2: -start_number - number of first frame
+#  $3: -r framerate
+#  $4: output filename
+
+ffmpeg -r $3 -start_number $2 -i $1 -vcodec libx264 -pix_fmt yuv420p $4.mp4

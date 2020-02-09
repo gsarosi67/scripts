@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ffmpeg -i "${1%.*}".tiff -pix_fmt yuv422p -q 1 "${1%.*}".jpg -y

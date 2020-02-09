@@ -1,0 +1,48 @@
+#!/bin/bash
+
+########################
+# $1 - full path to found file
+# $2 - search base path
+# $3 - path to this script 
+# $4 - destination base path
+
+echo
+echo `date`
+echo "File Found: $1"
+
+# Clean up the name removing any nasty chars, basename and dirname do not like spaces
+cleanfullpath=`echo $1 | tr -d '[:blank:][,][(][)][;]'`
+
+# Create new full path name by combining the destination base path $4
+# and the subpath from the found file
+newpath=$4`dirname $cleanfullpath | sed "s|$2||"`
+echo "  New Path: $newpath"
+
+# Get the filename from the found file full path 
+newfilename=`basename $cleanfullpath`
+echo "  New Filename: $newfilename"
+
+#Check for existance of destination directory if it does not exist create it
+if [ ! -d $newpath ]
+then 
+  echo "  Creating directory: $newpath"
+  mkdir -p $newpath
+  if [ $? -ne 0 ]
+  then
+    echo "  **ERROR: Directory create failed, $newpath"
+    exit 1
+  else
+    echo "  Directory created"
+  fi
+fi
+
+#Copy file to destination
+echo "  Copying $1 to $newpath/$newfilename"
+cp "$1" $newpath/$newfilename
+if [ $? -eq 0 ]
+then
+  echo "  Copy complete, Removing $1"
+  rm "$1"
+else
+  echo "  **ERROR: File copy failed, $newpath/$newfilename"
+fi

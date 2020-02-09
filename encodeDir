@@ -1,0 +1,17 @@
+#!/bin/bash
+
+disk1="/Volumes/Video-2015-2018/"
+disk2="/Users/sarosi/Dropbox/"
+MediaDir="CameraVideo/"
+disk1MovieDir="HomeMovies"
+disk2MovieDir="HomeMovies"
+
+i=1
+for f in $disk1$MediaDir$2/$1/*.MOV
+do 
+   echo $i
+   ffmpeg -i $f -c:v libx264 -profile:v main -level 3.1 -c:a aac -strict -2 -ab 128k -b:v 6800k -movflags faststart -vf "yadif=0:-1:0" -metadata "genre="$2$3 $disk2$disk2MovieDir/$2/$1-$i.mp4
+   cp $disk2$disk2MovieDir/$2/$1-$i.mp4 $disk1$disk1MovieDir/$2
+   i=`expr $i + 1`
+done
+

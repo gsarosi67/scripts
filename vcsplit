@@ -1,0 +1,75 @@
+#!/bin/bash
+
+##
+# $1 filename
+# $2 start time
+# $3 -to is the end time, not the duration, but the end time to stop or "end"
+# $4 genre, usually use the year
+# $5 extra to add to the end of the filename (required)
+# $6 description
+
+input="videofile.mp4"
+starttime="00:00:00"
+endtime="end"
+year="2019"
+genre=""
+description="Sarosi"
+output_extra="-new"
+ext="mp4"
+
+PARAMS=""
+while (( "$#" )); do
+  case "$1" in
+    -i|--input)
+        input=$2
+        shift 2
+      ;;
+    -y|--year)
+        year=$2
+        shift 2
+      ;;
+    -g|--genre)
+        genre=$2
+        shift 2
+      ;;
+    -de|--description)
+        description=$2
+        shift 2
+      ;;
+    -o|--output_extra)
+        output_extra=$2
+        shift 2
+      ;;
+    -s|--start)
+        starttime=$2
+        shift 2
+      ;;
+    -e|--end)
+        endtime=$2
+        shift 2
+      ;;
+    -ext|--extension)
+        ext=$2
+        shift 2
+      ;;
+    --) # end argument parsing
+        shift
+        break
+      ;;
+    -*|--*=) # unsupported flags
+        echo "Error: Unsupported flag $1" >&2
+        exit 1
+      ;;
+    *) # preserve positional arguments
+        PARAMS="$PARAMS $1"
+        shift
+      ;;
+  esac
+done
+
+
+if [ "$endtime" = "end" ]; then
+   ffmpeg -i $input -ss $starttime -c:v copy -c:a copy -metadata "genre="$year$genre -metadata "description=$year,$description" ${input%.*}$output_extra.$ext
+else
+   ffmpeg -i $input -ss $starttime -to $endtime -c:v copy -c:a copy -metadata "genre="$year$genre -metadata "description=$year,$description" ${input%.*}$output_extra.$ext
+fi

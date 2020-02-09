@@ -1,0 +1,17 @@
+#!/bin/bash
+
+##
+# $1 filename
+# $2 start time
+# $3 -to is the end time, not the duration, but the end time to stop
+# $4 genre, usually use the year
+# $5 extra to add to the end of the filename (required)
+# $6 eq filter parameters, i.e. brightness=.2:contrast=1.2:saturation=1.4
+# $7 description 
+
+echo "eq filter: $6"
+if [ "$3" = "end" ]; then
+   ffmpeg -i $1 -ss $2 -c:v libx264 -profile:v main -level 3.1 -c:a aac -strict -2 -ab 128k -b:v 2500k -pix_fmt yuv420p -movflags faststart -vf "yadif=0:-1:0,eq=$6" -metadata "genre="$4 -metadata "comment=eq="$6 -metadata "description=$4,$7" ${1%.*}$5.mp4
+else
+   ffmpeg -i $1 -ss $2 -to $3 -c:v libx264 -profile:v main -level 3.1 -c:a aac -strict -2 -ab 128k -b:v 2500k -pix_fmt yuv420p -movflags faststart -vf "yadif=0:-1:0,eq=$6" -metadata "genre="$4 -metadata "comment=eq="$6 -metadata "description=$4,$7" ${1%.*}$5.mp4
+fi

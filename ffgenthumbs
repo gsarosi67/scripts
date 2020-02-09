@@ -1,0 +1,11 @@
+#!/bin/bash
+
+##############################3#####################
+# Extract multiple frames from a video 
+#  $1 - input video
+#  $2 - number of seconds between frames, 
+#       i.e. 60 would extract one frame per minute
+####################################################
+
+name=${1%.*}
+ffmpeg -i $1 -f image2 -vf fps=1/$2 $name-frame%2d.png

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+i=1
+for f in $1/*$2
+do 
+   echo "doing $f"
+   name=${f%.*}
+   ext=${f##*.}
+   echo "renaming " $f " to " $3_`printf "%04d" $i`.$ext
+   #mv -i $f $3_$i.$ext
+   i=`expr $i + 1`
+done

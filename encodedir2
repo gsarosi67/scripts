@@ -1,0 +1,10 @@
+#!/bin/bash
+
+i=1
+for f in $1/*
+do 
+   echo $i
+   ffmpeg -i $f -c:v libx264 -profile:v main -level 3.1 -c:a aac -strict -2 -ab 128k -b:v 4800k -movflags faststart -vf "yadif=0:-1:0" -metadata "genre="$2$3 $1-$i.mp4
+   i=`expr $i + 1`
+done
+

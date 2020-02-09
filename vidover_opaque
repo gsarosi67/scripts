@@ -1,0 +1,95 @@
+#!/bin/bash
+
+
+inputFile=input.mp4
+overlayFile1=overlay1.mp4
+overlayFile2=overlay2.mp4
+xPos1=50
+yPos1=main_h-overlay_h-30
+xPos2=main_w-overlay_w-50
+yPos2=main_h-overlay_h-30
+width=1920
+height=1080
+genre=timelapse
+extra=overlay
+
+PARAMS=""
+while (( "$#" )); do
+  case "$1" in
+    -i|--input) 
+        inputFile=$2
+        shift 2
+      ;;
+    -o1|--overlay1)
+        overlayFile1=$2 
+        shift 2
+      ;;
+    -o2|--overlay2)
+        overlayFile2=$2 
+        shift 2
+      ;;
+    -x1) 
+        xPos1=$2
+        shift 2
+      ;;
+    -y1) 
+        yPos1=$2
+        shift 2
+      ;;
+    -x2) 
+        xPos2=$2
+        shift 2
+      ;;
+    -y2) 
+        yPos2=$2
+        shift 2
+      ;;
+    -w) 
+        width=$2
+        shift 2
+      ;;
+    -h) 
+        height=$2
+        shift 2
+      ;;
+    -g) 
+        genre=$2
+        shift 2
+      ;;
+    -e) 
+        extra=$2
+        shift 2
+      ;;
+    --) # end argument parsing
+      shift
+      break
+      ;;
+    -*|--*=) # unsupported flags
+      echo "Error: Unsupported flag $1" >&2
+      exit 1
+      ;;
+    *) # preserve positional arguments
+      PARAMS="$PARAMS $1"
+      shift
+      ;;
+  esac
+done
+
+
+# set positional arguments in their proper place
+eval set -- "$PARAMS"
+
+echo "inputFile= $inputFile"
+echo "overlayFile1= $overlayFile1"
+echo "overlayFile2= $overlayFile2"
+echo "xPos1= $xPos1"
+echo "yPos1= $yPos1"
+echo "xPos2= $xPos2"
+echo "yPos2= $yPos2"
+echo "width= $width"
+echo "height= $height"
+echo "genre= $genre"
+echo "extra= $extra"
+echo "alpha= $alpha"
+
+ffmpeg -i $inputFile -vf "movie=$overlayFile1 [over1]; movie=$overlayFile2 [over2]; [in][over1] overlay=$xPos1:$yPos1 [combo1]; [combo1][over2] overlay=$xPos2:$yPos2 [comboall]" -codec:a copy -metadata "genre="$genre ${inputFile%.*}$extra.mp4

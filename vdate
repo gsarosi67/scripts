@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for f in $@
+do
+  echo "$f : `ffprobe -v quiet -print_format json -show_format $f | grep date`"
+done

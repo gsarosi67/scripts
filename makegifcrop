@@ -1,0 +1,30 @@
+#!/bin/bash
+
+echo $1 $2 $3 $4 $5 $6
+
+if [ -z $1 ]; then
+  echo "Error must include input filename"
+  exit -1
+fi
+if [ -z $2 ]; then
+  echo "Error must include start time: format mm:ss"
+  exit -1
+fi
+if [ -z $3 ]; then
+  echo "Error must include duration: format mm:ss"
+  exit -1
+fi
+if [ -z $4 ]; then
+  echo "Error must include framerate"
+  exit -1
+fi
+if [ -z $5 ]; then
+  echo "Error must include crop area format w:h:x:y"
+  exit -1
+fi
+
+fps=$4
+
+ffmpeg -y -ss $2 -t $3 -i $1 -vf fps=$fps,scale=320:-1:flags=lanczos,palettegen palette.png
+
+ffmpeg -ss $2 -t $3 -i $1 -i palette.png -filter_complex \ "fps=$fps,crop=$5,scale=320:-1:flags=lanczos[x];[x][1:v]paletteuse" $1-$6.gif

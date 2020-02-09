@@ -1,0 +1,5 @@
+#!/bin/bash
+
+name=${1%.*}
+timename=$(echo $2 | tr -d '[:]')
+ffmpeg -ss $2 -i $1 -vframes 1 $name-$timename.png

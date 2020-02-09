@@ -1,0 +1,4 @@
+#!/bin/bash -vx
+
+   ffmpeg -i $1.mp4 -metadata $2 -vcodec copy -acodec copy $1-tmp.mp4
+   mv $1-tmp.mp4 $1.mp4
